@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Question:</b>
+  <%= @q_and_a.question %>
+</p>
+
+<p>
+  <b>Answer:</b>
+  <%= @q_and_a.answer %>
+</p>
+
+
+<%= link_to 'Edit', edit_q_and_a_path(@q_and_a) %> |
+<%= link_to 'Back', q_and_as_path %>

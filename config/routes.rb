@@ -1,4 +1,7 @@
 CollaborativeQA::Application.routes.draw do
+  resources :q_and_as
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
