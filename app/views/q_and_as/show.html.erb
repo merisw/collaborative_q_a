@@ -1,3 +1,5 @@
+<% title(@q_and_a.question, "QAndAs") %>
+
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -10,6 +12,15 @@
   <%= @q_and_a.answer %>
 </p>
 
+<p>
+  <b>Edited by:</b>
+  <% @q_and_a.users.each do |e| %>
+    <%= e.email %>
+  <% end %>
+</p>
+
 
 <%= link_to 'Edit', edit_q_and_a_path(@q_and_a) %> |
+<%= link_to "Delete Q and A", q_and_a_path(@q_and_a), :method => :delete,
+  :confirm => "Are you sure you want to delete this Q and A?" %>
 <%= link_to 'Back', q_and_as_path %>

@@ -1,4 +1,6 @@
 class QAndAsController < ApplicationController
+  before_filter :authenticate_user!, :only => [:new, :edit, :create, :update, :destroy]
+  before_filter :find_q_and_a, :only => [:show, :edit, :update, :destroy]
   # GET /q_and_as
   # GET /q_and_as.json
   def index
@@ -13,8 +15,6 @@ class QAndAsController < ApplicationController
   # GET /q_and_as/1
   # GET /q_and_as/1.json
   def show
-    @q_and_a = QAndA.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @q_and_a }
@@ -34,20 +34,19 @@ class QAndAsController < ApplicationController
 
   # GET /q_and_as/1/edit
   def edit
-    @q_and_a = QAndA.find(params[:id])
   end
 
   # POST /q_and_as
   # POST /q_and_as.json
   def create
     @q_and_a = QAndA.new(params[:q_and_a])
-
+    @q_and_a.users << current_user
     respond_to do |format|
       if @q_and_a.save
         format.html { redirect_to @q_and_a, notice: 'Q and a was successfully created.' }
         format.json { render json: @q_and_a, status: :created, location: @q_and_a }
       else
-        format.html { render action: "new" }
+        format.html { render action: "new", alert: 'Q and a was not created.' }
         format.json { render json: @q_and_a.errors, status: :unprocessable_entity }
       end
     end
@@ -56,14 +55,14 @@ class QAndAsController < ApplicationController
   # PUT /q_and_as/1
   # PUT /q_and_as/1.json
   def update
-    @q_and_a = QAndA.find(params[:id])
-
+    @q_and_a.users << current_user
     respond_to do |format|
+
       if @q_and_a.update_attributes(params[:q_and_a])
         format.html { redirect_to @q_and_a, notice: 'Q and a was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: "edit", alert: 'Q and a was not updated.' }
         format.json { render json: @q_and_a.errors, status: :unprocessable_entity }
       end
     end
@@ -72,12 +71,16 @@ class QAndAsController < ApplicationController
   # DELETE /q_and_as/1
   # DELETE /q_and_as/1.json
   def destroy
-    @q_and_a = QAndA.find(params[:id])
     @q_and_a.destroy
+    flash[:notice] = "Q and A has been deleted."
+    redirect_to q_and_as_path
+  end
 
-    respond_to do |format|
-      format.html { redirect_to q_and_as_url }
-      format.json { head :no_content }
-    end
+  private
+  def find_q_and_a
+    @q_and_a = QAndA.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "The Q and A you were looking for could not be found."
+    redirect_to q_and_as_path
   end
 end

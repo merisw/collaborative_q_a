@@ -2,7 +2,9 @@ CollaborativeQA::Application.routes.draw do
   devise_for :users
 
   root :to => "q_and_as#index"
-  resources :q_and_as
+  resources :q_and_as do
+    resources :users
+  end
 
 
   # The priority is based upon order of creation:
