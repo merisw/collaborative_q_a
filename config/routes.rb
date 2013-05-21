@@ -1,4 +1,7 @@
 CollaborativeQA::Application.routes.draw do
+  devise_for :users
+
+  root :to => "q_and_as#index"
   resources :q_and_as
 
 
